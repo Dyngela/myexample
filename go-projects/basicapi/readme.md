@@ -18,7 +18,6 @@ You can modify the .env file to your liking. Default value are already set for t
 
 You can access the swagger documentation at http://localhost:8080/swagger/index.html (if you are running the server on your local machine with default port and in dev mode)
 
-```bash
 
 ### Using docker-compose
 
