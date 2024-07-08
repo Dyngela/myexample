@@ -19,8 +19,6 @@ type Command struct {
 	Value     string
 }
 
-type m_error string
-
 const (
 	MaxKeyLen   = 255
 	MaxValueLen = 1024 * 1024 // 1 MB
@@ -30,6 +28,13 @@ const (
 var (
 	IncompleteCommand = errors.New("incomplete command")
 	InvalidOperation  = errors.New("invalid operation")
+	Operators         = map[byte]string{
+		'*': "SET",
+		'&': "GET",
+		'#': "DELETE",
+		'!': "FLUSH",
+		'@': "CLEANUP",
+	}
 )
 
 type Server struct {
@@ -109,9 +114,9 @@ func (s *Server) readCommand(data []byte) (*Command, []byte, error) {
 	if len(data) < 256 {
 		return nil, data, IncompleteCommand
 	}
-
 	operation := data[0]
-	if operation != '*' && operation != '&' {
+	_, ok := Operators[operation]
+	if !ok {
 		return nil, data, InvalidOperation
 	}
 
